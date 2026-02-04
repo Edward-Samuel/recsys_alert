@@ -1,0 +1,22 @@
+apiVersion: 1
+
+groups:
+  - name: recsys-alerts
+    folder: ML Alerts
+    interval: 1m
+    rules:
+      - uid: high_latency
+        title: High Recommendation Latency
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 60
+              to: 0
+            model:
+              expr: histogram_quantile(0.95, rate(recommendation_latency_seconds_bucket[1m])) > 0.3
+              refId: A
+        for: 2m
+        annotations:
+          summary: "Recommendation API latency is too high"
