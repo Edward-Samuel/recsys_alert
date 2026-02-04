@@ -142,7 +142,7 @@ docker compose exec recsys_app curl http://localhost:8000/metrics
 
 - **Trigger:** 95th percentile latency > 0.3 seconds for 2+ minutes
 - **Query:** `histogram_quantile(0.95, rate(recommendation_latency_seconds_bucket[1m])) > 0.3`
-- **Action:** Email notification to `miraclinvinnarasi@gmail.com`
+- **Action:** Email notification to `xxx@gmail.com`
 
 ### Test the Alert
 
