@@ -7,7 +7,7 @@ groups:
     rules:
       - uid: high_latency
         title: High Recommendation Latency
-        condition: A
+        condition: C
         data:
           - refId: A
             datasourceUid: prometheus
@@ -15,8 +15,34 @@ groups:
               from: 60
               to: 0
             model:
-              expr: histogram_quantile(0.95, rate(recommendation_latency_seconds_bucket[1m])) > 0.3
+              expr: histogram_quantile(0.95, rate(recommendation_latency_seconds_bucket[1m]))
               refId: A
+          - refId: B
+            queryType: ""
+            model:
+              type: reduce
+              settings:
+                mode: "strict"
+                reducer: "lastNotNull"
+              expression: A
+            datasourceUid: "-100"
+          - refId: C
+            queryType: ""
+            model:
+              type: threshold
+              conditions:
+                - evaluator:
+                    params:
+                      - 0.3
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - B
+                  type: query
+              expression: B
+            datasourceUid: "-100"
         for: 2m
         annotations:
           summary: "Recommendation API latency is too high"
