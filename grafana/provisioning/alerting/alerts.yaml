@@ -21,9 +21,9 @@ groups:
             queryType: ""
             model:
               type: reduce
+              reducer: "max"
               settings:
-                mode: "strict"
-                reducer: "lastNotNull"
+                mode: "dropNN"
               expression: A
             datasourceUid: "-100"
           - refId: C
@@ -33,7 +33,8 @@ groups:
               conditions:
                 - evaluator:
                     params:
-                      - 0.3
+                      - 1.5
+                      - 1.0
                     type: gt
                   operator:
                     type: and
